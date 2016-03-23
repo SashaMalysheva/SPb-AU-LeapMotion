@@ -23,7 +23,7 @@ class SampleListener extends Listener {
 
     public void onFrame(Controller controller) {
         // Get the most recent frame and report some basic information
-        Frame frame = controller.frame();
-        System.out.println("Frame id: " + frame.id());
+        //Frame frame = controller.frame();
+        //System.out.println("Frame id: " + frame.id());
     }
 }
