@@ -22,7 +22,7 @@ public class FXController {
                 if (frame.isValid()) {
                     ImageList images = frame.images();
                     final Image image1 = images.get(0);
-                    Image image2 = images.get(1);
+                    final Image image2 = images.get(1);
 
                     Platform.runLater(
                         new Runnable() {
@@ -30,8 +30,8 @@ public class FXController {
                             public void run() {
                                 imageFromFirstCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
                                         image1.width(), image1.height()));
-                                imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
-                                        image1.width(), image1.height()));
+                                imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image2.data(),
+                                        image2.width(), image2.height()));
                             }
                         }
                     );
