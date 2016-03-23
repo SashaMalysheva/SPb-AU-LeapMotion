@@ -11,7 +11,7 @@ public class FXController {
     public Button buttonStartReceivingFrames;
     public Button buttonStopReceivingFrames;
     public ImageView imageFromFirstCamera;
-   // public ImageView imageFromSecondCamera;
+    public ImageView imageFromSecondCamera;
 
     private final Thread thread = new Thread(new Runnable() {
         @Override
@@ -29,6 +29,8 @@ public class FXController {
                             @Override
                             public void run() {
                                 imageFromFirstCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
+                                        image1.width(), image1.height()));
+                                imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
                                         image1.width(), image1.height()));
                             }
                         }
