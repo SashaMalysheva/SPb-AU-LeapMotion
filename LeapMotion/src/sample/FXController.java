@@ -12,6 +12,7 @@ public class FXController {
     public Button buttonStopReceivingFrames;
     public ImageView imageFromFirstCamera;
     public ImageView imageFromSecondCamera;
+    public ImageView imageFromDelta;
 
     private final Thread thread = new Thread(new Runnable() {
         @Override
@@ -24,23 +25,37 @@ public class FXController {
                     final Image image1 = images.get(0);
                     final Image image2 = images.get(1);
 
-                    Platform.runLater(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                imageFromFirstCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
-                                        image1.width(), image1.height()));
-                                imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image2.data(),
-                                        image2.width(), image2.height()));
-                            }
-                        }
-                    );
-                }
+                    if (image1.isValid() && image2.isValid()) {
+                        Platform.runLater(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    break;
+                                        imageFromFirstCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
+                                                image1.width(), image1.height()));
+                                        imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image2.data(),
+                                                image2.width(), image2.height()));
+
+                                        int size = image1.height() * image1.width();
+                                        byte[] data1 = image1.data();
+                                        byte[] data2 = image2.data();
+                                        byte[] delta = new byte[size];
+                                        for (int i = 0; i < size; i++) {
+                                            delta[i] = (byte) (data1[i] - data2[i]);
+                                        }
+
+                                        imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta,
+                                                image1.width(), image1.height()));
+                                    }
+                                }
+                        );
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
+                    }
                 }
             }
         }
