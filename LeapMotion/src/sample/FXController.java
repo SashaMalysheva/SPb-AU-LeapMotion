@@ -22,10 +22,29 @@ public class FXController {
                 System.out.println("MyFrame id: " + frame.id());
                 if (frame.isValid()) {
                     ImageList images = frame.images();
+
+                    // width: 640; height: 240
                     final Image image1 = images.get(0);
                     final Image image2 = images.get(1);
+/*
+                    InteractionBox iBox = frame.interactionBox();
+                    Pointable pointable = frame.pointables().frontmost();
 
+                    Vector leapPoint = pointable.stabilizedTipPosition();
+                    Vector normalizedPoint = iBox.normalizePoint(leapPoint, false);
+
+                    System.out.println(normalizedPoint.getX() + " " + normalizedPoint.getY() + " " + normalizedPoint.getZ());*/
+/*
                     if (image1.isValid() && image2.isValid()) {
+
+                        Vector slopes_left = image1.rectify(new Vector(140, 100, 0));
+                        System.out.println(slopes_left.getX() + " " + slopes_left.getY() + " " + slopes_left.getZ());
+                        Vector slopes_right = image2.rectify(new Vector(120, 100, 0));
+                        System.out.println(slopes_right.getX() + " " + slopes_right.getY() + " " + slopes_right.getZ());
+                        boolean t;
+                    }
+*/
+                    /* if (image1.isValid() && image2.isValid()) {
                         Platform.runLater(
                                 new Runnable() {
                                     @Override
@@ -55,7 +74,7 @@ public class FXController {
                         } catch (InterruptedException e) {
                             break;
                         }
-                    }
+                    } */
                 }
             }
         }
