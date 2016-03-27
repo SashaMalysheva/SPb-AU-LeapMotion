@@ -1,11 +1,13 @@
 package sample;
 
-import com.leapmotion.leap.*;
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Image;
+import com.leapmotion.leap.ImageList;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.image.*;
+import javafx.scene.image.ImageView;
 
 public class FXController {
     public Button buttonStartReceivingFrames;
@@ -44,7 +46,7 @@ public class FXController {
                         boolean t;
                     }
 */
-                    /* if (image1.isValid() && image2.isValid()) {
+                    if (image1.isValid() && image2.isValid()) {
                         Platform.runLater(
                                 new Runnable() {
                                     @Override
@@ -68,13 +70,7 @@ public class FXController {
                                     }
                                 }
                         );
-
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            break;
-                        }
-                    } */
+                    }
                 }
             }
         }

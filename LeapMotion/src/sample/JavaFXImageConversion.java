@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.scene.image.Image;
+
 import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.ByteArrayInputStream;
@@ -14,14 +15,15 @@ public class JavaFXImageConversion {
         try {
             ImageIO.write((RenderedImage) createBufferedImage(rawPixels, width, height), "png", out);
             out.flush();
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
         ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
         return new javafx.scene.image.Image(in);
     }
 
     private static BufferedImage createBufferedImage(byte[] pixels, int width, int height) {
         SampleModel sm = getIndexSampleModel(width, height);
-        DataBuffer db = new DataBufferByte(pixels, width*height, 0);
+        DataBuffer db = new DataBufferByte(pixels, width * height, 0);
         WritableRaster raster = Raster.createWritableRaster(sm, db, null);
         IndexColorModel cm = getDefaultColorModel();
         BufferedImage image = new BufferedImage(cm, raster, false, null);
@@ -40,10 +42,10 @@ public class JavaFXImageConversion {
         byte[] r = new byte[256];
         byte[] g = new byte[256];
         byte[] b = new byte[256];
-        for(int i=0; i<256; i++) {
-            r[i]=(byte)i;
-            g[i]=(byte)i;
-            b[i]=(byte)i;
+        for (int i = 0; i < 256; i++) {
+            r[i] = (byte) i;
+            g[i] = (byte) i;
+            b[i] = (byte) i;
         }
         IndexColorModel defaultColorModel = new IndexColorModel(8, 256, r, g, b);
         return defaultColorModel;
