@@ -1,5 +1,7 @@
--.idea
- -out
- -*.iml
- -*.log
- -*.xml
+*.idea
+*.idea\*
+*out
+*.iml
+*.log
+*.xml
+*.fxml
