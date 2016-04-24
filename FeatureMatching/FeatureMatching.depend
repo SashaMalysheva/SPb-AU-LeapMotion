@@ -314,3 +314,20 @@
 	<opencv2/highgui.hpp>
 	<iostream>
 
+1461525900 source:c:\users\alex\desktop\au\c++\parser_point\featurematchingpoint\main.cpp
+	<stdio.h>
+	<iostream>
+	"opencv2/core.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/xfeatures2d.hpp"
+	"opencv2/highgui.hpp"
+	<fstream>
+	<string>
+
+1460080727 c:\opencv\contrib\modules\xfeatures2d\include\opencv2\xfeatures2d.hpp
+	"opencv2/features2d.hpp"
+	"opencv2/xfeatures2d/nonfree.hpp"
+
+1460080727 c:\opencv\contrib\modules\xfeatures2d\include\opencv2\xfeatures2d\nonfree.hpp
+	"opencv2/features2d.hpp"
+
