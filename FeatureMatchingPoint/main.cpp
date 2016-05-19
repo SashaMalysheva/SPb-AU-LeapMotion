@@ -53,9 +53,9 @@ int main( int argc, char** argv )
     imshow("Keypoints 2", img_keypoints_2 );
     for(size_t i = 0; i <  keypoints_1.size(); i++)
     {
-        fout << "key1("
-        << keypoints_1[i].pt.x << ", " << keypoints_1[i].pt.y << "); key2("
-        << keypoints_2[i].pt.x << ", " << keypoints_2[i].pt.y << ")\n";
+        fout
+        << keypoints_1[i].pt.x << "\n" << keypoints_1[i].pt.y << "\n"
+        << keypoints_2[i].pt.x << "\n" << keypoints_2[i].pt.y << "\n";
     }
     waitKey(0);
 
