@@ -98,6 +98,8 @@ public class FXController {
                         System.out.println("Failed to read file.");
                     }
 
+                    float depthMatrix[] = new float[records.size() / 4];
+
                     for (int i = 0; i < records.size(); i += 4) {
                         float x1 = Float.parseFloat(records.get(i));
                         float y1 = Float.parseFloat(records.get(i + 1));
@@ -107,8 +109,8 @@ public class FXController {
                         Vector slopes_left = image1.rectify(new Vector(x1, y1, 0));
                         Vector slopes_right = image2.rectify(new Vector(x2, y2, 0));
 
-                        System.out.println(slopes_left.getX() + " " + slopes_left.getY() + " " + slopes_left.getZ());
-                        System.out.println(slopes_right.getX() + " " + slopes_right.getY() + " " + slopes_right.getZ());
+                        float z = 40 / (slopes_right.getX() - slopes_left.getX());
+                        depthMatrix[i / 4] = (float) (0.5 * (slopes_left.getY() + slopes_right.getY()) * z);
                     }
 
                     int size = image1.height() * image1.width();

@@ -277,6 +277,8 @@ public class MoleculeSampleApp extends Application {
        // setUserAgentStylesheet(STYLESHEET_MODENA);
         System.out.println("start()");
 
+
+        int width = 640, height = 240;
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         root.getChildren().add(world);
