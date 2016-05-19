@@ -1,9 +1,6 @@
 package sample;
 
-import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Image;
-import com.leapmotion.leap.ImageList;
+import com.leapmotion.leap.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -11,8 +8,12 @@ import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -65,6 +66,49 @@ public class FXController {
                         ImageIO.write(bImage2, "png", file2);
                     } catch (IOException e) {
                         System.out.println("Failed to save images.");
+                    }
+
+                    try {
+                        String[] cmdArray = new String[3];
+                        cmdArray[0] = "bin\\FeatureMatching.exe";
+                        cmdArray[1] = "image1.png";
+                        cmdArray[2] = "image2.png";
+                        Process process = Runtime.getRuntime().exec(cmdArray,null);
+                    } catch (Exception ignored) {
+                        System.out.println("Failed to run shell.");
+                    }
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    List<String> records = new ArrayList<String>();
+                    try
+                    {
+                        BufferedReader reader = new BufferedReader(new FileReader("outputPoint.txt"));
+                        String line;
+                        while ((line = reader.readLine()) != null)
+                        {
+                            records.add(line);
+                        }
+                        reader.close();
+                    } catch (IOException e) {
+                        System.out.println("Failed to read file.");
+                    }
+
+                    for (int i = 0; i < records.size(); i += 4) {
+                        float x1 = Float.parseFloat(records.get(i));
+                        float y1 = Float.parseFloat(records.get(i + 1));
+                        float x2 = Float.parseFloat(records.get(i + 2));
+                        float y2 = Float.parseFloat(records.get(i + 3));
+
+                        Vector slopes_left = image1.rectify(new Vector(x1, y1, 0));
+                        Vector slopes_right = image2.rectify(new Vector(x2, y2, 0));
+
+                        System.out.println(slopes_left.getX() + " " + slopes_left.getY() + " " + slopes_left.getZ());
+                        System.out.println(slopes_right.getX() + " " + slopes_right.getY() + " " + slopes_right.getZ());
                     }
 
                     int size = image1.height() * image1.width();
