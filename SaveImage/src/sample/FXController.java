@@ -45,6 +45,8 @@ public class FXController {
                 final Image image1 = images.get(0);
                 final Image image2 = images.get(1);
 
+
+
                 if (image1.isValid() && image2.isValid()) {
 
                     int width = image1.width();
