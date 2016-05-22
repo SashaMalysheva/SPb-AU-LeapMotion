@@ -331,3 +331,17 @@
 1460080727 c:\opencv\contrib\modules\xfeatures2d\include\opencv2\xfeatures2d\nonfree.hpp
 	"opencv2/features2d.hpp"
 
+1463922849 source:c:\users\alex\desktop\au\spb-au-leapmotion\featurematching\main.cpp
+	<opencv2/line_descriptor.hpp>
+	"opencv2/core/utility.hpp"
+	<opencv2/imgproc.hpp>
+	<opencv2/features2d.hpp>
+	<opencv2/highgui.hpp>
+	"opencv2/core.hpp"
+	"opencv2/features2d.hpp"
+	"opencv2/xfeatures2d.hpp"
+	"opencv2/highgui.hpp"
+	<iostream>
+	<fstream>
+	<string>
+

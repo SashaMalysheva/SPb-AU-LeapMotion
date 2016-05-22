@@ -3,6 +3,12 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/highgui.hpp>
+
+#include "opencv2/core.hpp"
+#include "opencv2/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
+#include "opencv2/highgui.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,7 +16,14 @@
 
 using namespace cv;
 using namespace cv::line_descriptor;
+using namespace cv::xfeatures2d;
 using namespace std;
+
+
+Mat imageMat1;
+Mat imageMat2;
+vector<KeyPoint> keypoints_1, keypoints_2;
+vector<KeyLine> keylines1, keylines2;
 
 static const char* keys =
 { "{@image_path1 | | Image path 1 }"
@@ -24,40 +37,27 @@ static void help()
 
 }
 
-int main( int argc, char** argv )
-{
-    /* get parameters from command line */
-    CommandLineParser parser( argc, argv, keys );
-    String image_path1 = parser.get<String>( 0 );
-    String image_path2 = parser.get<String>( 1 );
+void PoinMatching(){
+    //-- Step 1: Detect the keypoints using SURF Detector
+    int minHessian = 400;
 
-    if( image_path1.empty() || image_path2.empty() )
-    {
-        help();
-        return -1;
-    }
+    Ptr<SURF> detector = SURF::create( minHessian );
 
-    /* load image */
-    cv::Mat imageMat1 = imread( image_path1, 1 );
-    cv::Mat imageMat2 = imread( image_path2, 1 );
+    detector->detect( imageMat1, keypoints_1 );
+    detector->detect( imageMat2, keypoints_2 );
 
-    if( imageMat1.data == NULL || imageMat2.data == NULL )
-    {
-        cout << "Error, images could not be loaded. Please, check their path" << endl;
-    }
+}
 
-    /* create binary masks */
-    cv::Mat mask1 = Mat::ones( imageMat1.size(), CV_8UC1 );
-    cv::Mat mask2 = Mat::ones( imageMat2.size(), CV_8UC1 );
+void LineMatching(){
+/* create binary masks */
+    Mat mask1 = Mat::ones( imageMat1.size(), CV_8UC1 );
+    Mat mask2 = Mat::ones( imageMat2.size(), CV_8UC1 );
 
     /* create a pointer to a BinaryDescriptor object with default parameters */
     Ptr<BinaryDescriptor> bd = BinaryDescriptor::createBinaryDescriptor(  );
 
-    ofstream fout{};
-    fout.open("outputPoint.txt", ios::out);
-    /* compute lines and descriptors */
-    vector<KeyLine> keylines1, keylines2;
-    cv::Mat descr1, descr2;
+    /* compute descriptors */
+    Mat descr1, descr2;
 
     ( *bd )( imageMat1, mask1, keylines1, descr1, false, false );
     ( *bd )( imageMat2, mask2, keylines2, descr2, false, false );
@@ -98,16 +98,6 @@ int main( int argc, char** argv )
             good_matches.push_back( matches[i] );
     }
 
-    /* plot matches */
-    cv::Mat outImg;
-    cv::Mat scaled1, scaled2;
-    vector<char> mask( matches.size(), 1 );
-    drawLineMatches( imageMat1, lbd_octave1, imageMat2, lbd_octave2, good_matches, outImg, Scalar::all( -1 ), Scalar::all( -1 ), mask,
-                 DrawLinesMatchesFlags::DEFAULT );
-
-    imshow( "Matches", outImg );
-    waitKey();
-    imwrite("/home/ubisum/Desktop/images/env_match/matches.jpg", outImg);
     /* create an LSD detector */
     Ptr<LSDDetector> lsd = LSDDetector::createLSDDetector();
 
@@ -153,20 +143,49 @@ int main( int argc, char** argv )
         if( lsd_matches[i].distance < MATCHES_DIST_THRESHOLD )
             good_matches.push_back( lsd_matches[i] );
     }
+}
 
-    /* plot matches */
-    cv::Mat lsd_outImg;
-    resize( imageMat1, imageMat1, Size( imageMat1.cols / 2, imageMat1.rows / 2 ) );
-    resize( imageMat2, imageMat2, Size( imageMat2.cols / 2, imageMat2.rows / 2 ) );
-    vector<char> lsd_mask( matches.size(), 1 );
-    drawLineMatches( imageMat1, octave0_1, imageMat2, octave0_2, good_matches, lsd_outImg, Scalar::all( -1 ), Scalar::all( -1 ), lsd_mask,
-               DrawLinesMatchesFlags::DEFAULT );
+int main( int argc, char** argv )
+{
+    /* get parameters from command line */
+    CommandLineParser parser( argc, argv, keys );
+    String image_path1 = parser.get<String>( 0 );
+    String image_path2 = parser.get<String>( 1 );
+
+    if( image_path1.empty() || image_path2.empty() )
+    {
+        help();
+        return -1;
+    }
+
+    ofstream fout{};
+    fout.open("outputPoint.txt", ios::out);
+
+    /* load image */
+    imageMat1 = imread( image_path1, 1 );
+    imageMat2 = imread( image_path2, 1 );
+
+    if( imageMat1.data == NULL || imageMat2.data == NULL )
+    {
+        cout << "Error, images could not be loaded. Please, check their path" << endl;
+    }
+
+    PoinMatching();
+    LineMatching();
+
+    //-- Write detected  keypoints
+    for(size_t i = 0; i <  keypoints_1.size(); i++)
+    {
+        fout
+        << keypoints_1[i].pt.x << "\n" << keypoints_1[i].pt.y << "\n"
+        << keypoints_2[i].pt.x << "\n" << keypoints_2[i].pt.y << "\n";
+    }
+    //-- Write detected  keyLines
     for(size_t i = 0; i <  keylines1.size(); i++)
     {
         fout << "key1("
-        << keylines1[i].pt.x << ", " << keylines1[i].pt.y << "); key2("
-        << keylines2[i].pt.x << ", " << keylines2[i].pt.y << ")\n";
+        << keylines1[i].pt.x << "\n" << keylines1[i].pt.y << "\n"
+        << keylines2[i].pt.x << "\n" << keylines2[i].pt.y << "\n";
     }
-    imshow( "LSD matches", lsd_outImg );
     waitKey();
 }
