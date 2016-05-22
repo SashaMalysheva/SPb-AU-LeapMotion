@@ -183,7 +183,7 @@ int main( int argc, char** argv )
     //-- Write detected  keyLines
     for(size_t i = 0; i <  keylines1.size(); i++)
     {
-        fout << "key1("
+        fout
         << keylines1[i].pt.x << "\n" << keylines1[i].pt.y << "\n"
         << keylines2[i].pt.x << "\n" << keylines2[i].pt.y << "\n";
     }
