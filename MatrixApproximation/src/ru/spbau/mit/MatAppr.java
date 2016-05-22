@@ -84,8 +84,10 @@ public class MatAppr {
         refreshVertical(0, width - 1);
 
         while (count > 0) {
-            if (minHor.value == INF && minVert.value == INF) {
+            while (minHor.value == INF && minVert.value == INF && count > 0) {
                 makeCloseValues();
+                refreshHorizontal(0, height - 1);
+                refreshVertical(0, width - 1);
             }
 
             if (count == 0)
@@ -169,17 +171,55 @@ public class MatAppr {
             while (vert[j][0] == INF)
                 j++;
             coord1 = j++;
-            while (vert[j][0] == INF)
+            while (j < height && vert[j][0] == INF)
                 j++;
             coord2 = j;
-            if (data[j][i] != 0 && coord2 - coord1 > 1 && coord2 - coord1 < vertical[i].dist) {
-                vertical[i].dist = coord2 - coord1;
-                vertical[i].coord1 = coord1;
-                vertical[i].coord2 = coord2;
+            if (coord2 - coord1 > 0 && coord2 - coord1 < vertical.dist) {
+                vertical.dist = coord2 - coord1;
+                vertical.coord1 = coord1;
+                vertical.coord2 = coord2;
             }
         }
 
+        horizontal.dist = INF;
+        int i = 0;
+        coord1 = 0;
+        coord2 = 0;
+        while (i < width - 1) {
+            while (hor[i][0] == INF)
+                i++;
+            coord1 = i++;
+            while (i < width && hor[i][0] == INF)
+                i++;
+            coord2 = i;
+            if (coord2 - coord1 > 0 && coord2 - coord1 < horizontal.dist) {
+                horizontal.dist = coord2 - coord1;
+                horizontal.coord1 = coord1;
+                horizontal.coord2 = coord2;
+            }
+        }
 
+        if (horizontal.dist < vertical.dist) {
+            coord1 = horizontal.coord1;
+            coord2 = horizontal.coord2;
+            if (hor[coord1][1] < hor[coord2][0])
+                for (i = coord1; i < coord2; i++)
+                    data[hor[coord2][0]][i] = data[hor[coord2][0]][coord2];
+            else
+                for (i = coord1; i < coord2; i++)
+                    data[hor[coord2][1]][i] = data[hor[coord2][1]][coord2];
+        } else {
+            coord1 = vertical.coord1;
+            coord2 = vertical.coord2;
+            if (vert[coord1][1] < vert[coord2][0])
+                for (i = coord1; i < coord2; i++)
+                    data[i][vert[coord2][0]] = data[coord2][vert[coord2][0]];
+            else
+                for (i = coord1; i < coord2; i++)
+                    data[i][vert[coord2][1]] = data[coord2][vert[coord2][1]];
+        }
+
+        debugOutput();
     }
 
     private void fillBounds() {
@@ -297,6 +337,7 @@ public class MatAppr {
                 j++;
             }
         }
+        count = 0;
     }
 
     private void refreshHorizontal(int up, int down) {
