@@ -1,10 +1,11 @@
 package sample;
 
 import com.leapmotion.leap.*;
+import com.leapmotion.leap.Image;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ public class FXController {
     public ImageView imageFromFirstCamera;
     public ImageView imageFromSecondCamera;
     public ImageView imageFromDelta;
+    public ImageView imageFromHeatMap;
     protected final BlockingQueue<Frame> queue = new ArrayBlockingQueue<>(1);
     private Timer timer;
 
@@ -29,8 +31,6 @@ public class FXController {
     private File file2 = new File("image2.png");
 
     class Task extends TimerTask {
-
-        // run is a abstract method that defines task performed at scheduled time.
         public void run() {
             Frame frame = null;
             try {
@@ -45,8 +45,6 @@ public class FXController {
                 final Image image1 = images.get(0);
                 final Image image2 = images.get(1);
 
-
-
                 if (image1.isValid() && image2.isValid()) {
 
                     int width = image1.width();
@@ -60,6 +58,16 @@ public class FXController {
                     imageFromFirstCamera.setImage(fxImage1);
                     imageFromSecondCamera.setImage(fxImage2);
 
+                    int size = height * width;
+                    byte[] data1 = image1.data();
+                    byte[] data2 = image2.data();
+                    byte[] delta = new byte[size];
+                    for (int i = 0; i < size; i++) {
+                        delta[i] = (byte) (data1[i] - data2[i]);
+                    }
+
+                    imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta, width, height));
+
                     BufferedImage bImage1 = SwingFXUtils.fromFXImage(fxImage1, null);
                     BufferedImage bImage2 = SwingFXUtils.fromFXImage(fxImage2, null);
 
@@ -70,18 +78,24 @@ public class FXController {
                         System.out.println("Failed to save images.");
                     }
 
-                    try {
-                        String[] cmdArray = new String[3];
-                        cmdArray[0] = "bin\\FeatureMatching.exe";
-                        cmdArray[1] = "image1.png";
-                        cmdArray[2] = "image2.png";
-                        Process process = Runtime.getRuntime().exec(cmdArray,null);
-                    } catch (Exception ignored) {
-                        System.out.println("Failed to run shell.");
-                    }
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String[] cmdArray = new String[3];
+                                cmdArray[0] = "bin\\FeatureMatching.exe";
+                                cmdArray[1] = "image1.png";
+                                cmdArray[2] = "image2.png";
+                                Process process = Runtime.getRuntime().exec(cmdArray,null);
+                            } catch (Exception ignored) {
+                                System.out.println("Failed to run shell.");
+                            }
+                        }
+                    });
+                    t.start();
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -100,13 +114,19 @@ public class FXController {
                         System.out.println("Failed to read file.");
                     }
 
-                    float depthMatrix[][] = new float[width][height];
+                    float depthMatrix[][] = new float[height][width];
 
-                    for (int i = 0; i < width; i++) {
-                        for (int j = 0; j < height; j++) {
+                    for (int i = 0; i < height; i++) {
+                        for (int j = 0; j < width; j++) {
                             depthMatrix[i][j] = 0;
                         }
                     }
+
+                    for (int i = 0; i < height; i++)
+                        depthMatrix[i][0] = depthMatrix[i][width - 1] = 10000;
+
+                    for (int j = 0; j < width; j++)
+                        depthMatrix[0][j] = depthMatrix[height - 1][j] = 10000;
 
                     for (int i = 0; i < records.size(); i += 4) {
                         float x1 = Float.parseFloat(records.get(i));
@@ -123,34 +143,50 @@ public class FXController {
                         int x = (int) Math.floor(x1);
                         int y = (int) Math.floor(y1);
 
-                        depthMatrix[x][y] = depth;
+                        if (y > 0)
+                            depthMatrix[y - 1][x] = depth;
+                        if (y > 1)
+                            depthMatrix[y - 2][x] = depth;
+                        if (y > 2)
+                            depthMatrix[y - 3][x] = depth;
+                        if (y < height - 3)
+                            depthMatrix[y + 3][x] = depth;
+                        if (y < height - 2)
+                            depthMatrix[y + 2][x] = depth;
+                        if (y < height - 1)
+                            depthMatrix[y + 1][x] = depth;
+                        if (x > 0)
+                            depthMatrix[y][x - 1] = depth;
+                        if (x > 1)
+                            depthMatrix[y][x - 2] = depth;
+                        if (x > 2)
+                            depthMatrix[y][x - 3] = depth;
+                        if (x < width - 3)
+                            depthMatrix[y][x + 3] = depth;
+                        if (x < width - 2)
+                            depthMatrix[y][x + 2] = depth;
+                        if (x < width - 1)
+                            depthMatrix[y][x + 1] = depth;
+                        depthMatrix[y][x] = depth;
                     }
-//---------------------------
-                    PrintWriter writer = null;
-                    try {
-                        writer = new PrintWriter("depth", "UTF-8");
-                    } catch (FileNotFoundException | UnsupportedEncodingException e) {
-                        System.out.println("Failed to create file for depth matrix.");
-                    }
-                    assert writer != null;
-                    for (int i = 0; i < width; i++) {
-                        for (int j = 0; j < height; j++) {
-                            writer.print(depthMatrix[i][j] + " ");
+
+                    MatAppr matAppr = new MatAppr(height, width, depthMatrix);
+                    matAppr.approximate();
+                    depthMatrix = matAppr.getData();
+
+                    for (int i = 0; i < height; i++) {
+                        for (int j = 0; j < width; j++) {
+                            System.out.print(depthMatrix[i][j] + " ");
                         }
-                        writer.println();
-                    }
-                    writer.close();
-//-------------------------
-
-                    int size = height * width;
-                    byte[] data1 = image1.data();
-                    byte[] data2 = image2.data();
-                    byte[] delta = new byte[size];
-                    for (int i = 0; i < size; i++) {
-                        delta[i] = (byte) (data1[i] - data2[i]);
+                        System.out.println();
                     }
 
-                    imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta, width, height));
+                    System.out.println("DONE");
+
+                    HeatMap heatMap = new HeatMap(height, width, depthMatrix);
+                    javafx.scene.image.Image heatMapImage = heatMap.createColorScaleImage();
+
+                    imageFromHeatMap.setImage(heatMapImage);
 
                     controller.removeListener(listener);
                     timer.cancel();
@@ -168,23 +204,19 @@ public class FXController {
                 System.out.println("MyFrame id: " + frame.id());
                 try {
                     queue.put(frame);
-                } catch (InterruptedException ignored) {
+                } catch (InterruptedException e) {
+                    /*e.printStackTrace();
+                    Thread.currentThread().interrupt();*/
                 }
             }
         }
     });
 
-    // Create a sample listener and controller
     private final SampleListener listener = new SampleListener();
     private Controller controller = null;
 
-//    public FXController() {}
-
     public void onClickStart(ActionEvent actionEvent) {
-        // Have the sample listener receive events from the controller
         controller = new Controller();
-
-//        int myTimer = 100000;
         while (!controller.isConnected()) {
             try {
                 Thread.sleep(500);
@@ -198,11 +230,14 @@ public class FXController {
         controller.addListener(listener);
 
         timer = new Timer();
-        timer.schedule(new Task(), 0, 100);
+        timer.schedule(new Task(), 0, 2000);
         System.out.println("test");
         thread.start();
     }
 
     public void onClickStop(ActionEvent actionEvent) {
+        controller.removeListener(listener);
+        timer.cancel();
+        thread.interrupt();
     }
 }
