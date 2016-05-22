@@ -8,10 +8,7 @@ import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -50,10 +47,13 @@ public class FXController {
 
                 if (image1.isValid() && image2.isValid()) {
 
+                    int width = image1.width();
+                    int height = image1.height();
+
                     javafx.scene.image.Image fxImage1 = JavaFXImageConversion.getJavaFXImage(image1.data(),
-                            image1.width(), image1.height());
+                            width, height);
                     javafx.scene.image.Image fxImage2 = JavaFXImageConversion.getJavaFXImage(image2.data(),
-                            image2.width(), image2.height());
+                            width, height);
 
                     imageFromFirstCamera.setImage(fxImage1);
                     imageFromSecondCamera.setImage(fxImage2);
@@ -98,7 +98,13 @@ public class FXController {
                         System.out.println("Failed to read file.");
                     }
 
-                    float depthMatrix[] = new float[records.size() / 4];
+                    float depthMatrix[][] = new float[width][height];
+
+                    for (int i = 0; i < width; i++) {
+                        for (int j = 0; j < height; j++) {
+                            depthMatrix[i][j] = 0;
+                        }
+                    }
 
                     for (int i = 0; i < records.size(); i += 4) {
                         float x1 = Float.parseFloat(records.get(i));
@@ -110,10 +116,31 @@ public class FXController {
                         Vector slopes_right = image2.rectify(new Vector(x2, y2, 0));
 
                         float z = 40 / (slopes_right.getX() - slopes_left.getX());
-                        depthMatrix[i / 4] = (float) (0.5 * (slopes_left.getY() + slopes_right.getY()) * z);
-                    }
+                        float depth = (float) (0.5 * (slopes_left.getY() + slopes_right.getY()) * z);
 
-                    int size = image1.height() * image1.width();
+                        int x = (int) Math.floor(x1);
+                        int y = (int) Math.floor(y1);
+
+                        depthMatrix[x][y] = depth;
+                    }
+//---------------------------
+                    PrintWriter writer = null;
+                    try {
+                        writer = new PrintWriter("depth", "UTF-8");
+                    } catch (FileNotFoundException | UnsupportedEncodingException e) {
+                        System.out.println("Failed to create file for depth matrix.");
+                    }
+                    assert writer != null;
+                    for (int i = 0; i < width; i++) {
+                        for (int j = 0; j < height; j++) {
+                            writer.print(depthMatrix[i][j] + " ");
+                        }
+                        writer.println();
+                    }
+                    writer.close();
+//-------------------------
+
+                    int size = height * width;
                     byte[] data1 = image1.data();
                     byte[] data2 = image2.data();
                     byte[] delta = new byte[size];
@@ -121,8 +148,7 @@ public class FXController {
                         delta[i] = (byte) (data1[i] - data2[i]);
                     }
 
-                    imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta,
-                            image1.width(), image1.height()));
+                    imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta, width, height));
 
                     controller.removeListener(listener);
                     timer.cancel();
