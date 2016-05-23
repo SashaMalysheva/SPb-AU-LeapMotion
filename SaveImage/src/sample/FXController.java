@@ -87,11 +87,12 @@ public class FXController {
                         @Override
                         public void run() {
                             try {
-                                String[] cmdArray = new String[4];
+                                String[] cmdArray = new String[5];
                                 cmdArray[0] = "bin\\FeatureMatching.exe";
                                 cmdArray[1] = "image1.png";
                                 cmdArray[2] = "image2.png";
-                                cmdArray[3] = "--no-display";
+                                cmdArray[3] = "src/resources/dst_path.png";
+                                cmdArray[4] = "--no-display";
                                 Process process = Runtime.getRuntime().exec(cmdArray,null);
                                 int res = process.waitFor();
                                 System.out.println("DONE");
@@ -107,8 +108,8 @@ public class FXController {
                         e.printStackTrace();
                     }
                     System.out.println("START");
-                    javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResource("dst_path.png").toExternalForm());
-                    imageFromHeatMap = new ImageView(image);
+                    javafx.scene.image.Image image = new javafx.scene.image.Image(FXController.class.getResourceAsStream("/resources/dst_path.png"));
+                    imageFromHeatMap.setImage(image);
                     controller.removeListener(listener);
                     System.out.println("Created");
                     timer.cancel();

@@ -17,6 +17,7 @@ const String keys =
     "{help h usage ? |                  | print this message                                                }"
     "{@left          |../data/aloeL.jpg | left view of the stereopair                                       }"
     "{@right         |../data/aloeR.jpg | right view of the stereopair                                      }"
+    "{@dst_path      |None              | optional path to save the resulting filtered disparity map        }"
     "{algorithm      |bm                | stereo matching method (bm or sgbm)                               }"
     "{no-display     |                  | don't display results                                             }"
     ;
@@ -32,7 +33,7 @@ int main(int argc, char** argv)
     }
     String left_im = parser.get<String>(0);
     String right_im = parser.get<String>(1);
-    String dst_path = "dst_path.png";
+    String dst_path = parser.get<String>(2);
     String algo = parser.get<String>("algorithm");
     bool no_display = parser.has("no-display");
     int max_disp = 160;
@@ -126,9 +127,12 @@ int main(int argc, char** argv)
     cout<<endl;
 
     //Save dst_path
-    Mat filtered_disp_vis;
-    getDisparityVis(filtered_disp,filtered_disp_vis,1);
-    imwrite(dst_path,filtered_disp_vis);
+    if(dst_path!="None")
+    {
+        Mat filtered_disp_vis;
+        getDisparityVis(filtered_disp,filtered_disp_vis,1);
+        imwrite(dst_path,filtered_disp_vis);
+    }
 
 
     if(!no_display)
