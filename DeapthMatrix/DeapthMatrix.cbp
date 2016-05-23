@@ -17,6 +17,7 @@
 					<Add directory="C:/Users/alex/opencv/opencv/build/include" />
 					<Add directory="C:/opencv/contrib/modules/line_descriptor/include" />
 					<Add directory="C:/opencv/contrib/modules/xfeatures2d/include" />
+					<Add directory="C:/opencv/contrib/modules/ximgproc/include" />
 				</Compiler>
 				<Linker>
 					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_aruco_pch_dephelp.a" />

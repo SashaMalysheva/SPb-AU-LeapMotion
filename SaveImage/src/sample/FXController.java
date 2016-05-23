@@ -82,112 +82,28 @@ public class FXController {
                         @Override
                         public void run() {
                             try {
-                                String[] cmdArray = new String[3];
+                                String[] cmdArray = new String[4];
                                 cmdArray[0] = "bin\\FeatureMatching.exe";
                                 cmdArray[1] = "image1.png";
                                 cmdArray[2] = "image2.png";
+                                cmdArray[3] = "--no-display"; //ToDo
                                 Process process = Runtime.getRuntime().exec(cmdArray,null);
+                                int res = process.waitFor();
+                                System.out.println("DONE");
                             } catch (Exception ignored) {
                                 System.out.println("Failed to run shell.");
                             }
                         }
                     });
                     t.start();
-
                     try {
-                        Thread.sleep(5000);
+                        t.join();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
-                    List<String> records = new ArrayList<String>();
-                    try
-                    {
-                        BufferedReader reader = new BufferedReader(new FileReader("outputPoint.txt"));
-                        String line;
-                        while ((line = reader.readLine()) != null)
-                        {
-                            records.add(line);
-                        }
-                        reader.close();
-                    } catch (IOException e) {
-                        System.out.println("Failed to read file.");
-                    }
-
-                    float depthMatrix[][] = new float[height][width];
-
-                    for (int i = 0; i < height; i++) {
-                        for (int j = 0; j < width; j++) {
-                            depthMatrix[i][j] = 0;
-                        }
-                    }
-
-                    for (int i = 0; i < height; i++)
-                        depthMatrix[i][0] = depthMatrix[i][width - 1] = 10000;
-
-                    for (int j = 0; j < width; j++)
-                        depthMatrix[0][j] = depthMatrix[height - 1][j] = 10000;
-
-                    for (int i = 0; i < records.size(); i += 4) {
-                        float x1 = Float.parseFloat(records.get(i));
-                        float y1 = Float.parseFloat(records.get(i + 1));
-                        float x2 = Float.parseFloat(records.get(i + 2));
-                        float y2 = Float.parseFloat(records.get(i + 3));
-
-                        Vector slopes_left = image1.rectify(new Vector(x1, y1, 0));
-                        Vector slopes_right = image2.rectify(new Vector(x2, y2, 0));
-
-                        float z = 40 / (slopes_right.getX() - slopes_left.getX());
-                        float depth = (float) (0.5 * (slopes_left.getY() + slopes_right.getY()) * z);
-
-                        int x = (int) Math.floor(x1);
-                        int y = (int) Math.floor(y1);
-
-                        if (y > 0)
-                            depthMatrix[y - 1][x] = depth;
-                        if (y > 1)
-                            depthMatrix[y - 2][x] = depth;
-                        if (y > 2)
-                            depthMatrix[y - 3][x] = depth;
-                        if (y < height - 3)
-                            depthMatrix[y + 3][x] = depth;
-                        if (y < height - 2)
-                            depthMatrix[y + 2][x] = depth;
-                        if (y < height - 1)
-                            depthMatrix[y + 1][x] = depth;
-                        if (x > 0)
-                            depthMatrix[y][x - 1] = depth;
-                        if (x > 1)
-                            depthMatrix[y][x - 2] = depth;
-                        if (x > 2)
-                            depthMatrix[y][x - 3] = depth;
-                        if (x < width - 3)
-                            depthMatrix[y][x + 3] = depth;
-                        if (x < width - 2)
-                            depthMatrix[y][x + 2] = depth;
-                        if (x < width - 1)
-                            depthMatrix[y][x + 1] = depth;
-                        depthMatrix[y][x] = depth;
-                    }
-
-                    MatAppr matAppr = new MatAppr(height, width, depthMatrix);
-                    matAppr.approximate();
-                    depthMatrix = matAppr.getData();
-
-                    for (int i = 0; i < height; i++) {
-                        for (int j = 0; j < width; j++) {
-                            System.out.print(depthMatrix[i][j] + " ");
-                        }
-                        System.out.println();
-                    }
-
-                    System.out.println("DONE");
-
-                    HeatMap heatMap = new HeatMap(height, width, depthMatrix);
-                    javafx.scene.image.Image heatMapImage = heatMap.createColorScaleImage();
-
-                    imageFromHeatMap.setImage(heatMapImage);
-
+                    System.out.println("START");
+                    //javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResource("dst_path.png").toExternalForm());
+                    //imageFromHeatMap = new ImageView(image);
                     controller.removeListener(listener);
                     timer.cancel();
                     thread.interrupt();
