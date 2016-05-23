@@ -4,10 +4,13 @@ import com.leapmotion.leap.*;
 import com.leapmotion.leap.Image;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.image.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -24,8 +27,10 @@ public class FXController {
     public ImageView imageFromSecondCamera;
     public ImageView imageFromDelta;
     public ImageView imageFromHeatMap;
+    public MenuBar menuBar;
     protected final BlockingQueue<Frame> queue = new ArrayBlockingQueue<>(1);
     private Timer timer;
+    private String algorithm = "bm";
 
     private File file1 = new File("image1.png");
     private File file2 = new File("image2.png");
@@ -86,7 +91,7 @@ public class FXController {
                                 cmdArray[0] = "bin\\FeatureMatching.exe";
                                 cmdArray[1] = "image1.png";
                                 cmdArray[2] = "image2.png";
-                                cmdArray[3] = "--no-display"; //ToDo
+                                cmdArray[3] = "--no-display";
                                 Process process = Runtime.getRuntime().exec(cmdArray,null);
                                 int res = process.waitFor();
                                 System.out.println("DONE");
@@ -102,9 +107,10 @@ public class FXController {
                         e.printStackTrace();
                     }
                     System.out.println("START");
-                    //javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResource("dst_path.png").toExternalForm());
-                    //imageFromHeatMap = new ImageView(image);
+                    javafx.scene.image.Image image = new javafx.scene.image.Image(getClass().getResource("dst_path.png").toExternalForm());
+                    imageFromHeatMap = new ImageView(image);
                     controller.removeListener(listener);
+                    System.out.println("Created");
                     timer.cancel();
                     thread.interrupt();
                 }
@@ -127,6 +133,20 @@ public class FXController {
             }
         }
     });
+
+
+
+    private void setAlgo(String algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public void onSgbmMenuClicked(Event e) {
+        setAlgo("sgbm");
+    }
+
+    public void onBmMenuClicked(Event e) {
+        setAlgo("bm");
+    }
 
     private final SampleListener listener = new SampleListener();
     private Controller controller = null;
