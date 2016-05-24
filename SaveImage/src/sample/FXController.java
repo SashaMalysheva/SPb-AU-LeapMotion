@@ -6,10 +6,13 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuBar;
+import javafx.event.EventHandler;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,6 +34,7 @@ public class FXController {
     public MenuBar menuBar;
     public ListView featurePoints;
     public Button buttonShowDistances;
+    public Button buttonShowHelp;
     private String algorithm = "bm";
     private Image image1, image2;
 
@@ -135,6 +139,18 @@ public class FXController {
     });
 
     public void onClickStart(ActionEvent actionEvent) {
+
+        if (controller != null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Controller is already created.");
+
+            alert.showAndWait();
+
+            return;
+        }
+
         controller = new Controller();
         while (!controller.isConnected()) {
             try {
@@ -152,10 +168,33 @@ public class FXController {
     }
 
     public void onClickStop(ActionEvent actionEvent) {
+
+        if (controller == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Click button \"Start\" before.");
+
+            alert.showAndWait();
+
+            return;
+        }
         thread.stop();
     }
 
     public void onClickShow(ActionEvent actionEvent) {
+
+        if (controller == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Click button \"Start\" before.");
+
+            alert.showAndWait();
+
+            return;
+        }
+
         Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -215,5 +254,22 @@ public class FXController {
 
         ObservableList<String> items = FXCollections.observableArrayList(featurePointsList);
         featurePoints.setItems(items);
+    }
+
+    public void onClickShowHelp(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Helper");
+        alert.setHeaderText(null);
+        alert.setContentText("This is a short description of the program.\n\n" +
+                "We assume that you have a Leap Motion connected to your device. " +
+                "The program will create a controller for your Leap Motion and read images from it in real time.\n" +
+                "Images will be processed and you will see four images as a result: two images from camera, " +
+                "delta of these images and graphical interpretation of depth matrix.\n\n" +
+                "To create a controller and start obtaining images click button \"Start\".\n" +
+                "To display a list of detected feature points click button \"Show\".\n" +
+                "To stop the process click button \"Stop\".\n" +
+                "Also you can select the algorithm of processing images.\n");
+
+        alert.showAndWait();
     }
 }
