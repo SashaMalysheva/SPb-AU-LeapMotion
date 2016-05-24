@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="369.0" prefWidth="588.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.FXController">
+  <MenuBar fx:id="menuBar">
+    <Menu text="Choose approximation algorithm">
+      <MenuItem onAction="#onSgbmMenuClicked" text="itemSgbmAlgo"/>
+      <MenuItem onAction="#onBmMenuClicked" text="itemBmAlgo"/>
+    </Menu>
+  </MenuBar>
+  <Button fx:id="buttonStartReceivingFrames" layoutX="14.0" layoutY="95.0" mnemonicParsing="false" onAction="#onClickStart" prefHeight="23.0" prefWidth="53.0" text="Start" />
+  <Button fx:id="buttonStopReceivingFrames" layoutX="14.0" layoutY="127.0" mnemonicParsing="false" onAction="#onClickStop" prefHeight="23.0" prefWidth="53.0" text="Stop" />
+  <ImageView fx:id="imageFromFirstCamera" fitHeight="150.0" fitWidth="200.0" layoutX="107.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+  <ImageView fx:id="imageFromSecondCamera" fitHeight="150.0" fitWidth="200.0" layoutX="361.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+  <ImageView fx:id="imageFromDelta" fitHeight="150.0" fitWidth="200.0" layoutX="361.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" />
+  <ImageView fx:id="imageFromHeatMap" fitHeight="150.0" fitWidth="200.0" layoutX="107.0" layoutY="185.0" pickOnBounds="true" preserveRatio="true" />
+</AnchorPane>
