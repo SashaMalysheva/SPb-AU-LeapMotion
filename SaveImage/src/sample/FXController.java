@@ -151,7 +151,7 @@ public class FXController {
     }
 
     public void onClickStop(ActionEvent actionEvent) {
-        thread.interrupt();
+        thread.stop();
     }
 
     public void onClickShow(ActionEvent actionEvent) {
@@ -208,7 +208,8 @@ public class FXController {
 
             DecimalFormat df = new DecimalFormat("#.##");
 
-            featurePointsList.add(df.format(x1) + " " + df.format(y1) + " " + df.format(dist));
+            if (dist > 0)
+                featurePointsList.add(df.format(x1) + " " + df.format(y1) + " " + df.format(dist));
         }
 
         ObservableList<String> items = FXCollections.observableArrayList(featurePointsList);
