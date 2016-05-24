@@ -18,7 +18,7 @@ const String keys =
     "{@left          |../data/aloeL.jpg | left view of the stereopair                                       }"
     "{@right         |../data/aloeR.jpg | right view of the stereopair                                      }"
     "{@dst_path      |None              | optional path to save the resulting filtered disparity map        }"
-    "{algorithm      |bm                | stereo matching method (bm or sgbm)                               }"
+    "{@algorithm      |bm                | stereo matching method (bm or sgbm)                               }"
     "{no-display     |                  | don't display results                                             }"
     ;
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     String left_im = parser.get<String>(0);
     String right_im = parser.get<String>(1);
     String dst_path = parser.get<String>(2);
-    String algo = parser.get<String>("algorithm");
+    String algo = parser.get<String>(3);
     bool no_display = parser.has("no-display");
     int max_disp = 160;
     double lambda = 8000.0;
