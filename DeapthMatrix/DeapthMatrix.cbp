@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="FeatureMatching" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/FeatureMatching" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add directory="C:/Users/alex/opencv/opencv/build/include" />
+					<Add directory="C:/opencv/contrib/modules/line_descriptor/include" />
+					<Add directory="C:/opencv/contrib/modules/xfeatures2d/include" />
+					<Add directory="C:/opencv/contrib/modules/ximgproc/include" />
+				</Compiler>
+				<Linker>
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_aruco_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_aruco310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_bgsegm_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_bgsegm310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_bioinspired_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_bioinspired310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_calib3d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_calib3d310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ccalib_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ccalib310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_core_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_core310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_datasets310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_dnn_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_dpm_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_dpm310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_face_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_face310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_features2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_features2d310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_flann_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_flann310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_fuzzy_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_fuzzy310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_highgui_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_highgui310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_imgcodecs_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_imgcodecs310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_imgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_imgproc310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_line_descriptor_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_line_descriptor310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ml_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ml310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_objdetect_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_objdetect310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_optflow_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_optflow310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_bioinspired_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_calib3d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_core_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_features2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_imgcodecs_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_imgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_line_descriptor_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_objdetect_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_photo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_reg_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_stereo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_stitching_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_superres_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_tracking_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_video_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_videoio_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_xfeatures2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_ximgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_perf_xphoto_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_photo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_photo310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_plot_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_plot310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_reg_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_reg310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_rgbd_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_rgbd310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_saliency_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_saliency310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_shape_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_shape310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_stereo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_stereo310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_stitching_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_stitching310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_structured_light_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_structured_light310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_superres_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_superres310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_surface_matching_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_surface_matching310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_aruco_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_bgsegm_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_bioinspired_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_calib3d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_core_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_features2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_flann_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_fuzzy_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_highgui_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_imgcodecs_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_imgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_line_descriptor_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_ml_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_objdetect_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_optflow_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_photo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_reg_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_rgbd_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_shape_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_stereo_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_stitching_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_structured_light_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_superres_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_tracking_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_video_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_videoio_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_xfeatures2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_ximgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_test_xphoto_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_text_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_text310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_tracking_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_tracking310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ts_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ts310.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_video_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_video310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_videoio_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_videoio310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_videostab_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_videostab310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_xfeatures2d_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_xfeatures2d310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ximgproc_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_ximgproc310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_xobjdetect_pch_dephelp.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_xobjdetect310.dll.a" />
+					<Add library="C:\opencv\build\x86\mingw\lib\libopencv_xphoto310.dll.a" />
+					<Add directory="C:/opencv/build/x86/mingw/lib" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/FeatureMatching" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
