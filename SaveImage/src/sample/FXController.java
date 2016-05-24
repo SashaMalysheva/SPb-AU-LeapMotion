@@ -103,12 +103,13 @@ public class FXController {
                             @Override
                             public void run() {
                                 try {
-                                    String[] cmdArray = new String[5];
+                                    String[] cmdArray = new String[6];
                                     cmdArray[0] = "bin\\FeatureMatching.exe";
                                     cmdArray[1] = "image1.png";
                                     cmdArray[2] = "image2.png";
                                     cmdArray[3] = "dst_path.png";
-                                    cmdArray[4] = "--no-display";
+                                    cmdArray[4] = algorithm;
+                                    cmdArray[5] = "--no-display";
                                     Process process = Runtime.getRuntime().exec(cmdArray, null);
                                     int res = process.waitFor();
                                     System.out.println("DONE1");
