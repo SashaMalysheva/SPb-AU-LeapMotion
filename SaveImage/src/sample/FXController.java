@@ -1,20 +1,25 @@
 package sample;
 
-import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Image;
-import com.leapmotion.leap.ImageList;
+import com.leapmotion.leap.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FXController {
     public Button buttonStartReceivingFrames;
@@ -24,7 +29,10 @@ public class FXController {
     public ImageView imageFromDelta;
     public ImageView imageFromHeatMap;
     public MenuBar menuBar;
+    public ListView featurePoints;
+    public Button buttonShowDistances;
     private String algorithm = "bm";
+    private Image image1, image2;
 
     private File file1 = new File("image1.png");
     private File file2 = new File("image2.png");
@@ -55,8 +63,8 @@ public class FXController {
                     ImageList images = frame.images();
 
                     // width: 640; height: 240
-                    final Image image1 = images.get(0);
-                    final Image image2 = images.get(1);
+                    image1 = images.get(0);
+                    image2 = images.get(1);
 
                     if (image1.isValid() && image2.isValid()) {
 
@@ -91,7 +99,7 @@ public class FXController {
                             System.out.println("Failed to save images.");
                         }
 
-                        Thread t = new Thread(new Runnable() {
+                        Thread t1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
@@ -103,15 +111,15 @@ public class FXController {
                                     cmdArray[4] = "--no-display";
                                     Process process = Runtime.getRuntime().exec(cmdArray, null);
                                     int res = process.waitFor();
-                                    System.out.println("DONE");
+                                    System.out.println("DONE1");
                                 } catch (Exception ignored) {
                                     System.out.println("Failed to run shell.");
                                 }
                             }
                         });
-                        t.start();
+                        t1.start();
                         try {
-                            t.join();
+                            t1.join();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -137,14 +145,73 @@ public class FXController {
         }
 
         controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
-        controller.addListener(listener);
         System.out.println("test");
 
         thread.start();
     }
 
     public void onClickStop(ActionEvent actionEvent) {
-        controller.removeListener(listener);
         thread.interrupt();
+    }
+
+    public void onClickShow(ActionEvent actionEvent) {
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String[] cmdArray = new String[3];
+                    cmdArray[0] = "bin\\FeatureMatchingOld.exe";
+                    cmdArray[1] = "image1.png";
+                    cmdArray[2] = "image2.png";
+                    Process process = Runtime.getRuntime().exec(cmdArray,null);
+                    int res = process.waitFor();
+                    System.out.println("DONE2");
+                } catch (Exception ignored) {
+                    System.out.println("Failed to run shell.");
+                }
+            }
+        });
+        t2.start();
+        try {
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        List<String> records = new ArrayList<String>();
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("outputPoint.txt"));
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                records.add(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Failed to read file.");
+        }
+
+        ArrayList<String> featurePointsList = new ArrayList<>();
+
+        for (int i = 0; i < records.size(); i += 4) {
+            float x1 = Float.parseFloat(records.get(i));
+            float y1 = Float.parseFloat(records.get(i + 1));
+            float x2 = Float.parseFloat(records.get(i + 2));
+            float y2 = Float.parseFloat(records.get(i + 3));
+
+            Vector slopes_left = image1.rectify(new Vector(x1, y1, 0));
+            Vector slopes_right = image2.rectify(new Vector(x2, y2, 0));
+
+            float z = 40 / (slopes_right.getX() - slopes_left.getX());
+            float dist = (float) (0.5 * (slopes_left.getY() + slopes_right.getY()) * z);
+
+            DecimalFormat df = new DecimalFormat("#.##");
+
+            featurePointsList.add(df.format(x1) + " " + df.format(y1) + " " + df.format(dist));
+        }
+
+        ObservableList<String> items = FXCollections.observableArrayList(featurePointsList);
+        featurePoints.setItems(items);
     }
 }
