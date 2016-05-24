@@ -1,0 +1,101 @@
+package sample;
+
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Image;
+import com.leapmotion.leap.ImageList;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+
+public class FXController {
+    public Button buttonStartReceivingFrames;
+    public Button buttonStopReceivingFrames;
+    public ImageView imageFromFirstCamera;
+    public ImageView imageFromSecondCamera;
+    public ImageView imageFromDelta;
+    protected final BlockingQueue<Frame> queue = new ArrayBlockingQueue<>(10);
+    private Timer timer;
+    class Task extends TimerTask {
+
+        // run is a abstract method that defines task performed at scheduled time.
+        public void run() {
+            Frame frame = null;
+            try {
+                frame = queue.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+            System.out.println("Frame has taken");
+            if (frame != null && frame.isValid()) {
+                ImageList images = frame.images();
+
+                // width: 640; height: 240
+                final Image image1 = images.get(0);
+                final Image image2 = images.get(1);
+                if (image1.isValid() && image2.isValid()) {
+                    imageFromFirstCamera.setImage(JavaFXImageConversion.getJavaFXImage(image1.data(),
+                            image1.width(), image1.height()));
+                    imageFromSecondCamera.setImage(JavaFXImageConversion.getJavaFXImage(image2.data(),
+                            image2.width(), image2.height()));
+
+                    int size = image1.height() * image1.width();
+                    byte[] data1 = image1.data();
+                    byte[] data2 = image2.data();
+                    byte[] delta = new byte[size];
+                    for (int i = 0; i < size; i++) {
+                        delta[i] = (byte) (data1[i] - data2[i]);
+                    }
+
+                    imageFromDelta.setImage(JavaFXImageConversion.getJavaFXImage(delta,
+                            image1.width(), image1.height()));
+                }
+            }
+        }
+    }
+
+    private final Thread thread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            while (!thread.isInterrupted()) {
+                Frame frame = controller.frame();
+                System.out.println("MyFrame id: " + frame.id());
+                try {
+                    queue.put(frame);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+    });
+
+    // Create a sample listener and controller
+    private final SampleListener listener = new SampleListener();
+    private final Controller controller = new Controller();
+
+//    public FXController() {}
+
+    public void onClickStart(ActionEvent actionEvent) {
+        // Have the sample listener receive events from the controller
+        controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
+        controller.addListener(listener);
+        timer = new Timer();
+        timer.schedule(new Task(), 0, 100);
+        System.out.println("test");
+        thread.start();
+    }
+
+    public void onClickStop(ActionEvent actionEvent) {
+        // Remove the sample listener when done
+        controller.removeListener(listener);
+        timer.cancel();
+        thread.interrupt();
+    }
+}
