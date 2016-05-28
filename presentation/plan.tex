@@ -1,0 +1,169 @@
+\documentclass{beamer}
+
+\usepackage{polyglossia}
+\usepackage{fontspec}
+\usepackage{nameref}
+\usepackage{ifthen}
+
+\usefonttheme{professionalfonts}
+\usetheme{Antibes}
+\useoutertheme{infolines_foot}
+\setbeamercovered{transparent=20}
+
+\usepackage[math-style=ISO,vargreek-shape=unicode]{unicode-math}
+
+\setdefaultlanguage[spelling=modern,babelshorthands=true]{russian}
+\setotherlanguage{english}
+
+\defaultfontfeatures{Ligatures={TeX}}
+\setmainfont{CMU Serif}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+\setmathfont{Latin Modern Math}
+\AtBeginDocument{\renewcommand{\setminus}{\mathbin{\backslash}}}
+
+\makeatletter
+\newcommand*{\currentname}{\@currentlabelname}
+\makeatother
+\def\t{\texttt}
+
+\newcommand{\cimg}[2]{%
+	\begin{center}%
+		\ifthenelse{\equal{#2}{}}{%
+			\includegraphics[width=0.75\linewidth]{#1}
+		}{%
+			\includegraphics[width=#2\linewidth]{#1}
+		}%
+	\end{center}%
+}
+
+\title[3D сканер]{3D-сканер с LeapMotion}
+\author{Гайдашенко Анастасия, Малышева Александра // куратор: Кринкин Кирилл Владимирович}
+\institute{СПб АУ РАН}
+\date{Весна 2016}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\section{Цель}
+
+\begin{frame}[t]{Цель проекта}
+	Реализовать 3D сканер с использование API LeapMotion
+	
+	\cimg{01.png}{0.45}
+
+\end{frame}
+
+\section{Задачи}
+\begin{frame}[t]{Задачи}
+	\begin{enumerate}
+		\item Изучение API LeapMotion
+		\item Изучение и выбор алгоритмов поиска Feature Poin
+		\item Изучение и выбор алгоритмов поиска матрицы глубины
+		\item Разработка аппаратной части сканера
+		\item Доработка алгоритма построения 3D-модели (Kinect -> LeapMotion)
+	\end{enumerate}
+\end{frame}
+
+\section{Архитектура проекта}
+\begin{frame}[t]{Архитектура проекта}
+	\cimg{02.png}{0.7}
+\end{frame}
+
+\subsection{LeapMotion + Java}
+\begin{frame}[t]{LeapMotion + Java}
+	\begin{enumerate}
+		\item Изучение API LeapMotion, выбор используемых алгоритмов
+		\item Получение катинок с LeapMotion, изучение их UI
+		\item Проверка результатов, вывод картинок
+	\end{enumerate}
+\end{frame}
+
+\subsection{OpenCV + C++}
+\begin{frame}[t]{OpenCV + C++}
+	\begin{enumerate}
+	\item знакомство с API OpenCV
+	\item изучение алгоритмов семейства Feature Point Detection и Feature Point Matching
+	\item
+		получение списка feature point’ов:
+		\begin{enumerate}
+			\item SurfFeatureDetector
+			\item LSDDetector
+		\end{enumerate}
+	\end{enumerate}
+\end{frame}
+
+\subsection{LeapMotion + Java}
+\begin{frame}[t]{LeapMotion + Java}
+	\begin{enumerate}
+		\item Сопоставление feature point’ов
+		\item Ректификация полученных точек
+		\item Получение координат полученных точек в 3D
+		\item Расчет глубины feature point’ов
+	\end{enumerate}
+\end{frame}
+
+\subsection{OpenCV + C++}
+\begin{frame}[t]{OpenCV + C++}
+	\begin{enumerate}
+	\item Выбор лучшего алгоритма, исходя из специфики изображений
+	\item Реализация поиска матрицы глубины по расстоянию до feature point’ов
+	\end{enumerate}
+\end{frame}
+
+\subsection{Интеграция}
+\begin{frame}[t]{Интеграция}
+	\begin{enumerate}
+		\item
+		Первая попытка: make
+		\begin{enumerate}
+			\item Проблема ??
+		\end{enumerate}
+
+	\item
+		Вторая попытка: .bat
+		\begin{enumerate}
+			\item Проблема ??
+		\end{enumerate}
+
+	\item
+		Итоговый вариант: call shell
+	\end{enumerate}
+\end{frame}
+
+\subsection{Аппаратная часть}
+\begin{frame}[t]{Аппаратная часть}
+		Состоит из четырех частей: Stepper, Arduino, Каркас, LeapMotion
+		\cimg{03.png}{0.6}
+\end{frame}
+
+\section{Сложности}
+\begin{frame}[t]{Сложности}
+	\begin{description}
+		\item[API LeapMotion]
+			Отсутствие сериализации у класса leap.Image
+
+		\item[Обилие алгоритмов Feature Point Detection]
+			Выбор оптимального
+			
+		\item[Threads]
+			Корректное последовательное выполнение вызываемых алгоритмов
+	\end{description}
+\end{frame}
+
+\section{Итоги}
+\begin{frame}[t]{Итоги}
+	\cimg{04.png}{0.9}
+\end{frame}
+
+\section{Спасибо за внимание}
+\begin{frame}[t]{Спасибо за внимание}
+	Спасибо за внимание
+	\begin{description}
+		\item[Репозиторий:]	\url{https://github.com/SashaMalysheva/SPb-AU-LeapMotion}
+	\end{description}
+\end{frame}
+\end{document}
