@@ -37,8 +37,8 @@
 	\end{center}%
 }
 
-\title[3D сканер]{3D-сканер с LeapMotion}
-\author{Гайдашенко Анастасия, Малышева Александра // куратор: Кринкин Кирилл Владимирович}
+\title[3D сканер]{3D-сканер с Leap Motion}
+\author{Гайдашенко Анастасия, Малышева Александра\\куратор: Кринкин Кирилл Владимирович}
 \institute{СПб АУ РАН}
 \date{Весна 2016}
 
@@ -51,7 +51,7 @@
 \section{Цель}
 
 \begin{frame}[t]{Цель проекта}
-	Реализовать 3D сканер с использование API LeapMotion
+	Реализовать 3D сканер с использование API Leap Motion
 	
 	\cimg{01.png}{0.45}
 
@@ -60,11 +60,11 @@
 \section{Задачи}
 \begin{frame}[t]{Задачи}
 	\begin{enumerate}
-		\item Изучение API LeapMotion
-		\item Изучение и выбор алгоритмов поиска Feature Poin
-		\item Изучение и выбор алгоритмов поиска матрицы глубины
+		\item Изучение API Leap Motion
+		\item Поиск оптимального алгоритма Feature Point Detection для данных изображений
+		\item Изучение плюсов и минусов различных алгоритмов  поиска матрицы глубины, выбор оптимального
 		\item Разработка аппаратной части сканера
-		\item Доработка алгоритма построения 3D-модели (Kinect -> LeapMotion)
+		\item Доработка алгоритма построения 3D-модели (Kinect -> Leap Motion)
 	\end{enumerate}
 \end{frame}
 
@@ -73,22 +73,22 @@
 	\cimg{02.png}{0.7}
 \end{frame}
 
-\subsection{LeapMotion + Java}
-\begin{frame}[t]{LeapMotion + Java}
+\subsection{Leap Motion + Java}
+\begin{frame}[t]{Leap Motion + Java}
 	\begin{enumerate}
-		\item Изучение API LeapMotion, выбор используемых алгоритмов
-		\item Получение катинок с LeapMotion, изучение их UI
-		\item Проверка результатов, вывод картинок
+		\item Изучение API Leap Motion, выбор алгоритма для нахождения расстояния
+		\item Получение катинок с Leap Motion, изучение их UI
+		\item Проверка результатов, вывод изображений
 	\end{enumerate}
 \end{frame}
 
 \subsection{OpenCV + C++}
 \begin{frame}[t]{OpenCV + C++}
 	\begin{enumerate}
-	\item знакомство с API OpenCV
-	\item изучение алгоритмов семейства Feature Point Detection и Feature Point Matching
+	\item Знакомство с API OpenCV
+	\item Изучение алгоритмов семейства Feature Point Detection и Feature Point Matching
 	\item
-		получение списка feature point’ов:
+		Получение списка feature point’ов:
 		\begin{enumerate}
 			\item SurfFeatureDetector
 			\item LSDDetector
@@ -96,8 +96,8 @@
 	\end{enumerate}
 \end{frame}
 
-\subsection{LeapMotion + Java}
-\begin{frame}[t]{LeapMotion + Java}
+\subsection{Leap Motion + Java}
+\begin{frame}[t]{Leap Motion + Java}
 	\begin{enumerate}
 		\item Сопоставление feature point’ов
 		\item Ректификация полученных точек
@@ -109,7 +109,7 @@
 \subsection{OpenCV + C++}
 \begin{frame}[t]{OpenCV + C++}
 	\begin{enumerate}
-	\item Выбор лучшего алгоритма, исходя из специфики изображений
+	\item Выбор наилучшего алгоритма, исходя из специфики изображений
 	\item Реализация поиска матрицы глубины по расстоянию до feature point’ов
 	\end{enumerate}
 \end{frame}
@@ -136,19 +136,18 @@
 
 \subsection{Аппаратная часть}
 \begin{frame}[t]{Аппаратная часть}
-		Состоит из четырех частей: Stepper, Arduino, Каркас, LeapMotion
+		Состоит из четырех частей: Stepper, Arduino, Каркас, Leap Motion
 		\cimg{03.png}{0.6}
 \end{frame}
 
 \section{Сложности}
 \begin{frame}[t]{Сложности}
 	\begin{description}
-		\item[API LeapMotion]
+		\item[API Leap Motion]
 			Отсутствие сериализации у класса leap.Image
 
-		\item[Обилие алгоритмов Feature Point Detection]
-			Выбор оптимального
-			
+		\item[Feature Point Detection]
+			Среди огромного числа уже существующих алгоритмов выбрать наилучший для LeapMotion::Image
 		\item[Threads]
 			Корректное последовательное выполнение вызываемых алгоритмов
 	\end{description}
@@ -163,7 +162,7 @@
 \begin{frame}[t]{Спасибо за внимание}
 	Спасибо за внимание
 	\begin{description}
-		\item[Репозиторий:]	\url{https://github.com/SashaMalysheva/SPb-AU-LeapMotion}
+		\item[Репозиторий:]  \url{https://github.com/SashaMalysheva/SPb-AU-LeapMotion}
 	\end{description}
 \end{frame}
 \end{document}
