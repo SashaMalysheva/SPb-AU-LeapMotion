@@ -1,4 +1,11 @@
-*.idea
-*out
-*.iml
-*.log
+*.toc
+
+*.out
+
+*.nav
+
+*.snm
+
+*.vrb
+
+*.aux
